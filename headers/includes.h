@@ -1,9 +1,8 @@
-#include <stdlib.h>
 #include <stdbool.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#include "tarefa.h"
-#include "pilha.h"
 #include "fila.h"
+#include "pilha.h"
+#include "tarefa.h"

@@ -4,10 +4,9 @@
 
 typedef struct Pilha Pilha;
 
-typedef struct Pilha
-{
-    Tarefa *topo;
-    int tamanho;
+typedef struct Pilha {
+  Tarefa *topo;
+  int tamanho;
 };
 
 Pilha *criarPilha();

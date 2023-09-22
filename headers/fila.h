@@ -4,10 +4,9 @@
 
 typedef struct Fila Fila;
 
-typedef struct Fila
-{
-    Tarefa *inicio;
-    int tamanho;
+typedef struct Fila {
+  Tarefa *inicio;
+  int tamanho;
 };
 
 Fila *criarFila();

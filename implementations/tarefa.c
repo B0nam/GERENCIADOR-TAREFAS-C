@@ -1,27 +1,23 @@
-#include "includes.h"
+#include "../headers/includes.h"
 
-Tarefa *criarTarefa(char cDescricao[100], bool bPrioridade, Tarefa *ptProximo)
-{
-    Tarefa *tTarefa = malloc(sizeof(Tarefa));
-    tTarefa->cDescricao = strdup(cDescricao);
-    tTarefa->bPrioridade = bPrioridade;
-    tTarefa->ptProximo = ptProximo;
+Tarefa *criarTarefa(char cDescricao[100], bool bPrioridade, Tarefa *ptProximo) {
+  Tarefa *tTarefa = malloc(sizeof(Tarefa));
+  tTarefa->cDescricao = strdup(cDescricao);
+  tTarefa->bPrioridade = bPrioridade;
+  tTarefa->ptProximo = ptProximo;
 
-    return tTarefa;
+  return tTarefa;
 }
 
-int exibirTarefa(Tarefa *ptTarefa)
-{
-    printf("--- Tarefa Atual ---\n");
-    printf("Descrição:\t%s\n", ptTarefa->cDescricao);
-    if (ptTarefa->bPrioridade)
-    {
-        printf("Prioritaria:\tSIM\n");
-    } else
-    {
-        printf("Prioritaria:\tNÃO\n");
-    }
-    printf("Endereço:\t%p\n", ptTarefa);
-    
-    return EXIT_SUCCESS;
+int exibirTarefa(Tarefa *ptTarefa) {
+  printf("--- Tarefa Atual ---\n");
+  printf("Descrição:\t%s\n", ptTarefa->cDescricao);
+  if (ptTarefa->bPrioridade) {
+    printf("Prioritaria:\tSIM\n");
+  } else {
+    printf("Prioritaria:\tNÃO\n");
+  }
+  printf("Endereço:\t%p\n", ptTarefa);
+
+  return EXIT_SUCCESS;
 }
