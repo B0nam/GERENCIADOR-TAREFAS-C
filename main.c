@@ -3,7 +3,7 @@
 bool executarPrograma = true;
 int iOpcao = 0;
 Pilha *pilhaPrioritaria = NULL;
-Tarefa *tarefaAtual = NULL;
+Fila *filaGeral = NULL;
 
 void limparTela();
 int menuInserirTarefa();
@@ -13,6 +13,7 @@ int menuVisualizarTarefa();
 int main(void)
 {
     pilhaPrioritaria = criarPilha();
+    filaGeral = criarFila();
 
     while (executarPrograma)
     {
@@ -35,7 +36,7 @@ int main(void)
             menuInserirTarefa();
             break;
         case 2:
-            printf("--- Finalizando a Tarefa Atual ---");
+            menuFinalizarTarefa();
             break;
         case 3:
             menuVisualizarTarefa();
@@ -64,7 +65,14 @@ int menuInserirTarefa()
 
     printf("\n--- Inserir Nova Tarefa ---\n");
     printf("Descrição da tarefa: ");
-    scanf("%s", &descricaoTarefa);
+    fgets(descricaoTarefa, sizeof(descricaoTarefa), stdin);
+
+    // Removendo a quebra de linha (se existir) no final da descrição
+    size_t len = strlen(descricaoTarefa);
+    if (len > 0 && descricaoTarefa[len - 1] == '\n')
+    {
+        descricaoTarefa[len - 1] = '\0';
+    }
 
     while (prioridadeTarefa <= 0 || prioridadeTarefa > 2)
     {
@@ -91,11 +99,20 @@ int menuInserirTarefa()
             printf("\n[-] A tarefa não foi adicionada na pilha\n");
             exit(EXIT_FAILURE);
         }
-        tarefaAtual = pilhaPrioritaria->topo;
     }
     else
     {
         // Criar tarefa sem prioridade - fila
+        if (filaGeral->inicio == NULL)
+        {
+            novaTarefa = criarTarefa(descricaoTarefa, false, NULL);
+            printf("[+] Criada a primeira tarefa.\n");
+        }
+        else
+        {
+
+            printf("[+] Criada tarefa.\n");
+        }
     }
 
     return EXIT_SUCCESS;
@@ -103,13 +120,33 @@ int menuInserirTarefa()
 
 int menuFinalizarTarefa()
 {
+    if (pilhaPrioritaria)
     return EXIT_SUCCESS;
+}
+
+Tarefa *buscarTarefaAtual()
+{
+    Tarefa *ptTarefa = NULL;
+    if (pilhaPrioritaria->topo)
+    {
+        ptTarefa = pilhaPrioritaria->topo;
+    }
+    else if (filaGeral->inicio)
+    {
+        ptTarefa = filaGeral->inicio;
+    }
+    else
+    {
+        printf("[-] Não há tarefas pendentes\n");
+    }
+
+    return ptTarefa;
 }
 
 int menuVisualizarTarefa()
 {
     printf("--- Tarefa Atual ---\n");
-    exibirTarefa(tarefaAtual);
+    exibirTarefa(buscarTarefaAtual);
 
     return EXIT_SUCCESS;
 }

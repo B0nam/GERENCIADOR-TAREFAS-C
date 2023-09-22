@@ -1,9 +1,18 @@
 #ifndef fila
 #define fila
-#include "tarefa.h"
+#include "includes.h"
 
-Tarefa *criarFila();
-void inserirFila(Tarefa *fila, Tarefa *Tarefa);
-void removerFila(Tarefa *fila);
+typedef struct Fila Fila;
+
+typedef struct Fila
+{
+    Tarefa *inicio;
+    int tamanho;
+};
+
+
+Fila *criarFila();
+int inserirFila(Fila *fiFila, Tarefa *ptNovaTarefa);
+int removerFila(Fila *fiFila);
 
 #endif

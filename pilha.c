@@ -44,15 +44,3 @@ int removerPilha(Pilha *piPilha)
     }
     return EXIT_SUCCESS;
 }
-
-int mostrarTarefaAtualPilha(Pilha *piPilha)
-{
-    if (piPilha->topo != NULL)
-    {
-        exibirTarefa(piPilha->topo);
-    } else
-    {
-        printf("[-] Não há tarefas pendentes.\n");
-    }
-    return EXIT_SUCCESS;
-}

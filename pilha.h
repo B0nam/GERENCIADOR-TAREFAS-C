@@ -2,15 +2,16 @@
 #define pilha
 #include "includes.h"
 
-typedef struct sPilha
+typedef struct Pilha Pilha;
+
+typedef struct Pilha
 {
     Tarefa *topo;
     int tamanho;
-} Pilha;
+};
 
 Pilha *criarPilha();
 int inserirPilha(Pilha *piPilha, Tarefa *ptNovaTarefa);
 int removerPilha(Pilha *piPilha);
-int mostrarTarefaAtualPilha(Pilha *piPilha);
 
 #endif
