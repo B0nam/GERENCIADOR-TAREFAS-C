@@ -10,10 +10,10 @@ int menuInserirTarefa();
 int menuFinalizarTarefa();
 int menuVisualizarTarefa();
 
-int main(void)
+int main(void) // FUNCAO PRINCIPAL
 {
-    pilhaPrioritaria = criarPilha();
-    filaGeral = criarFila();
+    pilhaPrioritaria = criarPilha(); // CRIA PILHA PARA PRIORITARIOS
+    filaGeral = criarFila();         // CRIA FILA PARA GERAL
 
     while (executarPrograma)
     {
@@ -23,23 +23,29 @@ int main(void)
         printf("2 - Finalizar Tarefa Atual\n");
         printf("3 - Visualizar Tarefa Atual\n");
         printf("Opção: ");
-        scanf("%d", &iOpcao);
+        scanf(" %d", &iOpcao);
         limparTela();
 
         switch (iOpcao)
         {
-        case 0:
+        case 0: // SAI DO PROGRAMA
             printf("Você escolheu sair do programa.\n");
             executarPrograma = false;
             break;
-        case 1:
+        case 1: // ADICIONA NOVA TAREFA
             menuInserirTarefa();
             break;
-        case 2:
-            menuFinalizarTarefa();
+        case 2: // FINALIZA TAREFA
+            if (menuFinalizarTarefa() == EXIT_FAILURE)
+            {
+                printf("[-] Não há tarefas pendentes");
+            }
             break;
-        case 3:
-            menuVisualizarTarefa();
+        case 3: // VISUALIZA TAREFA
+            if (menuVisualizarTarefa() == EXIT_FAILURE)
+            {
+                printf("[-] Não há tarefas pendentes\n");
+            }
             break;
         default:
             printf("Opção inválida.");
@@ -57,74 +63,54 @@ void limparTela()
     }
 }
 
-int menuInserirTarefa()
+int menuInserirTarefa() // ADICIONA TAREFA
 {
     int prioridadeTarefa = 0;
     char descricaoTarefa[100];
     Tarefa *novaTarefa;
-
+    // SOLICITA DESCRICAO E PEDE PRIORIDADE
     printf("\n--- Inserir Nova Tarefa ---\n");
     printf("Descrição da tarefa: ");
+    getchar();
     fgets(descricaoTarefa, sizeof(descricaoTarefa), stdin);
-
-    // Removendo a quebra de linha (se existir) no final da descrição
+    // FILTRO DO RECEBIMENTO DA STRING
     size_t len = strlen(descricaoTarefa);
     if (len > 0 && descricaoTarefa[len - 1] == '\n')
     {
-        descricaoTarefa[len - 1] = '\0';
+        descricaoTarefa[len - 1] = '\0'; // REMOVE O \0 EXCEDENTE
     }
 
     while (prioridadeTarefa <= 0 || prioridadeTarefa > 2)
     {
         printf("\nPrioritária [1] SIM [2] NAO: ");
-        scanf("%d", &prioridadeTarefa);
+        scanf(" %d", &prioridadeTarefa); // RECEBE PRIORIDADE
     }
-    if (prioridadeTarefa == 1)
-    {
-        // Criar tarefa com prioridade - pilha
-        if (pilhaPrioritaria->topo == NULL)
-        {
-            novaTarefa = criarTarefa(descricaoTarefa, true, NULL);
-            printf("[+] Criada a primeira tarefa.\n");
-        }
-        else
-        {
-            novaTarefa = criarTarefa(descricaoTarefa, true, pilhaPrioritaria->topo);
-            printf("[+] Criada tarefa.\n");
-        }
 
-        int iInserirPilhaStatus = inserirPilha(pilhaPrioritaria, novaTarefa);
-        if(iInserirPilhaStatus != 0)
-        {
-            printf("\n[-] A tarefa não foi adicionada na pilha\n");
-            exit(EXIT_FAILURE);
-        }
+    if (prioridadeTarefa == 1) // ADICIONA À PILHA OU FILA DEPENDENDO DA PRIORIDADE
+    {
+        novaTarefa = criarTarefa(descricaoTarefa, true, NULL);
+        return inserirPilha(pilhaPrioritaria, novaTarefa);
     }
     else
     {
-        // Criar tarefa sem prioridade - fila
-        if (filaGeral->inicio == NULL)
-        {
-            novaTarefa = criarTarefa(descricaoTarefa, false, NULL);
-            printf("[+] Criada a primeira tarefa.\n");
-        }
-        else
-        {
-
-            printf("[+] Criada tarefa.\n");
-        }
+        novaTarefa = criarTarefa(descricaoTarefa, false, NULL);
+        return inserirFila(filaGeral, novaTarefa);
     }
-
-    return EXIT_SUCCESS;
 }
 
-int menuFinalizarTarefa()
+int menuFinalizarTarefa() // ENCERRA A TAREFA ATUAL
 {
-    if (pilhaPrioritaria)
-    return EXIT_SUCCESS;
+    if (pilhaPrioritaria->topo) // ENCERRA PRIMEIRAMENTE O TOPO DA PILHA
+    {
+        return removerPilha(pilhaPrioritaria);
+    }
+    else
+    {
+        return removerFila(filaGeral); // ENCERRA TAREFA DA FILA GERAL
+    }
 }
 
-Tarefa *buscarTarefaAtual()
+Tarefa *buscarTarefaAtual() // REALIZA A BUSCA DA TAREFA
 {
     Tarefa *ptTarefa = NULL;
     if (pilhaPrioritaria->topo)
@@ -135,18 +121,23 @@ Tarefa *buscarTarefaAtual()
     {
         ptTarefa = filaGeral->inicio;
     }
-    else
-    {
-        printf("[-] Não há tarefas pendentes\n");
-    }
 
     return ptTarefa;
 }
 
 int menuVisualizarTarefa()
 {
-    printf("--- Tarefa Atual ---\n");
-    exibirTarefa(buscarTarefaAtual);
-
-    return EXIT_SUCCESS;
+    Tarefa *tarefaAtual = buscarTarefaAtual();
+    if (tarefaAtual)
+    {
+        exibirTarefa(tarefaAtual);
+        printf("\nPressione enter para continuar...\n");
+        getchar();
+        getchar();
+        return EXIT_SUCCESS;
+    }
+    else
+    {
+        return EXIT_FAILURE;
+    }
 }
