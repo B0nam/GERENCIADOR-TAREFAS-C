@@ -33,12 +33,13 @@ int inserirFila(Fila *fiFila, Tarefa *ptNovaTarefa) {
 int removerFila(Fila *fiFila) {
   if (fiFila->inicio) {
     Tarefa *primeiraTarefa = fiFila->inicio;
-    Tarefa *proximaTarefa = primeiraTarefa->ptProximo;
+    fiFila->inicio =
+        primeiraTarefa
+            ->ptProximo; // Atualiza o início para apontar para a próxima tarefa
 
-    fiFila->inicio = proximaTarefa;
+    free(primeiraTarefa); // Libera apenas a primeira tarefa
 
-    free(primeiraTarefa);
-    free(proximaTarefa);
+    fiFila->tamanho--;
     return EXIT_SUCCESS;
   } else {
     return EXIT_FAILURE;

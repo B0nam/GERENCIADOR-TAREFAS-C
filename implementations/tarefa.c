@@ -1,5 +1,6 @@
 #include "../headers/includes.h"
 
+// REALIZA A CRIACAO DE UMA NOVA TAREFA
 Tarefa *criarTarefa(char cDescricao[100], bool bPrioridade, Tarefa *ptProximo) {
   Tarefa *tTarefa = malloc(sizeof(Tarefa));
   tTarefa->cDescricao = strdup(cDescricao);
@@ -9,6 +10,7 @@ Tarefa *criarTarefa(char cDescricao[100], bool bPrioridade, Tarefa *ptProximo) {
   return tTarefa;
 }
 
+// REALIZA A EXIBICAO DA TAREFA
 int exibirTarefa(Tarefa *ptTarefa) {
   printf("--- Tarefa Atual ---\n");
   printf("Descrição:\t%s\n", ptTarefa->cDescricao);
